@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "fsdangular-490b1": {
+      "hosting": {
+        "fsdangular": [
+          "fsdangular-490b1"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "fsdangular-490b1"
+  }
+}
