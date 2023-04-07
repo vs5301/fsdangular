@@ -6,12 +6,16 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './pages/home/home.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NavbarComponent } from './shared/navbar/navbar.component';
+import { RestaurantsComponent } from './pages/restaurants/restaurants.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
-    DashboardComponent
+    DashboardComponent,
+    NavbarComponent,
+    RestaurantsComponent
   ],
   imports: [
     BrowserModule,
