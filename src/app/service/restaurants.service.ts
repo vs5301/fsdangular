@@ -4,7 +4,7 @@ import { Restaurants } from '../models/restaurants';
 @Injectable({
   providedIn: 'root'
 })
-export class RestaurantsService {
+export class RestaurantService {
 
   restaurants: Restaurants[] = [
     new Restaurants("A",30,4.3,"indian"),

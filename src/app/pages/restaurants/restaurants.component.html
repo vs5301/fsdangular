@@ -1,4 +1,11 @@
-<div class="content" style="align-items:centerR;">
+<div class="content" style="align-items:center;">
+
+    <input #name placeholder="Enter Restaurant Name">
+    <input #time placeholder="Enter Time to Deliver">
+    <input #ratings placeholder="Enter Ratings">
+    <input #category placeholder="Enter Categories">
+    <button (click)="addRestaurant(name.value,time.value,ratings.value,category.value)">Add</button>
+
     <h3>List of Restaurants</h3>
 
     <p *ngFor="let restaurant of restaurants">
