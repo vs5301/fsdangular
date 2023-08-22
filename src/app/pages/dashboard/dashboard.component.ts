@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
-import { FirestoreModule } from '@angular/fire/firestore'
+import { Firestore } from '@angular/fire/firestore'
+import { PromoCodeList } from 'src/app/classes/promo-code-list';
+import { DbService } from 'src/app/service/db.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -9,18 +10,26 @@ import { FirestoreModule } from '@angular/fire/firestore'
 })
 export class DashboardComponent implements OnInit{
 
-  promoCodeList: any
-  // documents: Observable<any[]>
+  promoCodeList: any[] = []
+  dummyList!: PromoCodeList;
   
-  constructor(public firestore: FirestoreModule){
-    // this.documents = firestore.collection("promo-codes").valueChanges()
-  }
-
-  async fetchPromoCodes(){
-    
+  constructor(
+    public firestore: Firestore,
+    public dbService: DbService){
   }
 
   ngOnInit(): void {
-      
+    this.getPromoCodeList()
   }
+
+  getPromoCodeList(){
+    let codeSub = this.dbService.codeModelSubject.subscribe((value) => {
+      if (value.length !== 0) {
+        this.promoCodeList = value
+        
+        this.dbService.getWindowRef().setTimeout(() => codeSub.unsubscribe(), this.dbService.timeoutInterval * 6)
+      }
+    })
+  }
+
 }

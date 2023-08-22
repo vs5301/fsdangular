@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -10,7 +10,11 @@ import { RestaurantsComponent } from './pages/restaurants/restaurants.component'
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { environment } from 'src/environments/environment';
 import { provideFirestore, getFirestore } from  '@angular/fire/firestore'
-import { FirestoreModule } from '@angular/fire/firestore'
+import { FirestoreModule } from '@angular/fire/firestore';
+import { ProfileComponent } from './pages/profile/profile.component'
+import { DbService } from './service/db.service';
+import { ReactiveFormsModule } from '@angular/forms';
+import { AuthenticateComponent } from './pages/authenticate/authenticate.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +22,9 @@ import { FirestoreModule } from '@angular/fire/firestore'
     HomeComponent,
     DashboardComponent,
     NavbarComponent,
-    RestaurantsComponent
+    RestaurantsComponent,
+    ProfileComponent,
+    AuthenticateComponent
   ],
   imports: [
     BrowserModule,
@@ -26,9 +32,20 @@ import { FirestoreModule } from '@angular/fire/firestore'
     NgbModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideFirestore(() => getFirestore()),
-    FirestoreModule
+    FirestoreModule,
+    ReactiveFormsModule
   ],
-  providers: [],
+  providers: [
+    DbService,
+    {
+      provide: APP_INITIALIZER,
+      useFactory: function(dbService: DbService) {
+        return () => dbService.onLoad()
+      },
+      deps: [DbService],
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

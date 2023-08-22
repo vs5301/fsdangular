@@ -1,14 +1,15 @@
-<div class="content" style="align-items: center;">
+<div class="content text-center mt-4" style="align-items: center;">
+    <div class="container mt-3">
+        <input #name placeholder="Enter Restaurant Name" class="mx-2 rounded-1">
+        <input #time placeholder="Enter Time to Deliver" class="mx-2 rounded-1">
+        <input #ratings placeholder="Enter Ratings" class="mx-2 rounded-1">
+        <input #category placeholder="Enter Categories" class="mx-2 rounded-1">
+    </div>
+    <button class="mt-3 rounded-1" (click)="addRestaurant(name.value,time.value,ratings.value,category.value)">Add</button>
 
-    <input #name placeholder="Enter Restaurant Name">
-    <input #time placeholder="Enter Time to Deliver">
-    <input #ratings placeholder="Enter Ratings">
-    <input #category placeholder="Enter Categories">
-    <button (click)="addRestaurant(name.value,time.value,ratings.value,category.value)">Add</button>
+    <h3 class="mt-5">List of Restaurants</h3>
 
-    <h3>List of Restaurants</h3>
-
-    <p *ngFor="let restaurant of restaurants">
+    <p class="fs-4 mt-3" *ngFor="let restaurant of restaurants">
         {{restaurant.name}} | {{restaurant.timeToDeliver}} mins
     </p>
 </div>

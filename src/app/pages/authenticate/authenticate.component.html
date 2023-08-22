@@ -1,0 +1,13 @@
+<div class="content">
+    <h3>REGISTER</h3>
+    <div class="mb-3">
+        <form action="" [formGroup]="authForm">
+            <label class="form-label" for="email">Enter Email: </label>
+            <input class="form-control" type="text" id="email" placeholder="john@example.com" formControlName="email"><br>   
+            <label class="form-label" for="password">Enter Password: </label>
+            <input class="form-control" type="password" id="password" placeholder="Min 6 charachters" formControlName="password"> <br>
+            FORM DATA: {{authForm.value | json}} <br>
+            <button class="btn btn-dark" (click)="registerUser()">Register</button>
+        </form> 
+    </div>
+</div>
