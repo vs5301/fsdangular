@@ -22,9 +22,11 @@ export class ProfileComponent implements OnInit{
 
   message = ""
   data = 10
+  userData: any;
 
   constructor(){
-    
+    const data = localStorage.getItem("userData")
+    this.userData = JSON.parse(data!)
   }
 
   ngOnInit(): void {

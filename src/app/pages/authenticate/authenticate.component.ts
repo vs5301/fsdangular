@@ -21,6 +21,7 @@ export class AuthenticateComponent {
   }
 
   uid!: String
+  userData: any
 
   authForm = new FormGroup(
     {
@@ -35,7 +36,6 @@ export class AuthenticateComponent {
       const user = userCredential.user
       this.uid = user.uid
 
-      const collectionRef = collection(this.firestore, "users")
     // addDoc(collectionRef, {
     //   name: '',
     //   phone: '',
@@ -48,16 +48,18 @@ export class AuthenticateComponent {
     //   console.log("Error message: ", error.message);      
     // })    
 
-      const docRef = doc(this.firestore, `${collectionRef}/${this.uid}`)
-      console.log("Document Id: ", this.uid);    
-      setDoc(docRef, {
+      const docRef = doc(this.firestore, `users/${this.uid}`)
+      console.log("Document Id: ", this.uid);   
+      this.userData =  {
         name: '',
         phone: '',
         email: this.authForm.value.email,
         profileImage: '',
         address: '',
         id: this.uid
-      })
+      }
+      localStorage.setItem("userData", JSON.stringify(this.userData))
+      setDoc(docRef, this.userData)
     })
     .catch((error) => {
       console.log("Error code: ", error.code);

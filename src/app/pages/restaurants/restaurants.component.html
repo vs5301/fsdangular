@@ -1,4 +1,4 @@
-<div class="content text-center mt-4" style="align-items: center;">
+<!-- <div class="content text-center mt-4" style="align-items: center;">
     <div class="container mt-3">
         <input #name placeholder="Enter Restaurant Name" class="mx-2 rounded-1">
         <input #time placeholder="Enter Time to Deliver" class="mx-2 rounded-1">
@@ -12,4 +12,83 @@
     <p class="fs-4 mt-3" *ngFor="let restaurant of restaurants">
         {{restaurant.name}} | {{restaurant.timeToDeliver}} mins
     </p>
+</div> -->
+
+<div class="content">
+    <button class="btn btn-dark" (click)="changeView()">{{text}}</button>
+</div>
+
+<div class="content" *ngIf="addView">
+    <h3>Add Restaurant</h3>
+    <div class="mb-3">
+        <form action="" [formGroup]="restaurantForm" (ngSubmit)="addRestaurantToFirebase()">
+            
+            <label class="form-label" for="name">Enter Name: </label>
+            <input class="form-control" type="text" id="name" placeholder="Subway" formControlName="name"><br>
+            
+            <label class="form-label" for="phone">Enter Phone: </label>
+            <input class="form-control" type="text" id="phone" placeholder="123456789" formControlName="phone"><br>   
+
+            <label class="form-label" for="email">Enter Email: </label>
+            <input class="form-control" type="text" id="email" placeholder="restaurant@example.com" formControlName="email"><br>
+
+            <label for="veg">Select Type: </label>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="veg" id="veg" formControlName="veg">
+                <label class="form-check-label" for="flexCheckDefault">Veg</label>
+            </div>
+
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="nonVeg" id="nonVeg" formControlName="nonVeg">
+                <label class="form-check-label" for="flexCheckDefault">Non Veg</label>
+            </div><br>
+
+            <label for="servingType">Select serving type: </label> <br>
+            <input type="radio" formControlName="servingType" value="delivery" name="" id="">Delivery<br>
+            <input type="radio" formControlName="servingType" value="dining" name="" id="">Dining<br>
+            <input type="radio" formControlName="servingType" value="Both" name="" id="">Both<br>
+            <br>
+
+            <select name="" id="" formControlName="city">
+                <option *ngFor="let cities of cities" [value]="cities.city">
+                    {{cities.city}}
+                </option>
+            </select> <br>
+            <br>
+
+            <label for="image" class="form-label">Select Image</label><br>
+            <input type="file" formControlName="image" accept="image/png image/jpg" src="" alt="" (change)="pickFile($event)">
+            <br> <br>
+            FORM DATA: {{restaurantForm.value | json}} <br><br>
+            <button type="submit" class="btn btn-dark" [disabled]="loader" (click)="fetchPromoRestaurants()">
+                Submit
+                <span *ngIf="loader" class="sr-only">&nbsp;</span>
+                <div *ngIf="loader" class="spinner-border spinner-border-sm text-white" role="status">
+                    <span class="sr-only"></span>
+                </div>
+            </button>
+        </form> 
+    </div>
+</div>
+
+<div class="content" *ngIf="!addView">
+    <h3>List of Restaurants</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Image</th>
+                <th scope="col">Name</th>
+                <th scope="col">Phone</th>
+                <th scope="col">Email</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let document of restaurantList">
+                <td><img class="rounded-circle" width="64" height="64" src = {{document.image}} alt=""></td>
+                <td>{{document.name}}</td>
+                <td>{{document.phone}}</td>
+                <td>{{document.email}}</td>
+            </tr>
+        </tbody>
+    </table>
 </div>
