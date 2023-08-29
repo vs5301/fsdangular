@@ -19,7 +19,7 @@
 </div>
 
 <div class="content" *ngIf="addView">
-    <h3>Add Restaurant</h3>
+    <h3>{{text}}</h3>
     <div class="mb-3">
         <form action="" [formGroup]="restaurantForm" (ngSubmit)="addRestaurantToFirebase()">
             
@@ -59,15 +59,16 @@
             <label for="image" class="form-label">Select Image</label><br>
             <input type="file" formControlName="image" accept="image/png image/jpg" src="" alt="" (change)="pickFile($event)">
             <br> <br>
-            FORM DATA: {{restaurantForm.value | json}} <br><br>
+
             <button type="submit" class="btn btn-dark" [disabled]="loader" (click)="fetchPromoRestaurants()">
-                Submit
+                {{text}}
                 <span *ngIf="loader" class="sr-only">&nbsp;</span>
                 <div *ngIf="loader" class="spinner-border spinner-border-sm text-white" role="status">
                     <span class="sr-only"></span>
                 </div>
             </button>
         </form> 
+        FORM DATA: {{restaurantForm.value | json}} <br><br>
     </div>
 </div>
 
@@ -88,6 +89,9 @@
                 <td>{{document.name}}</td>
                 <td>{{document.phone}}</td>
                 <td>{{document.email}}</td>
+                <td><a routerLink="/dishes" [queryParams]="{id: document.docId, name: document.name}">Dishes</a></td>
+                <td><a routerLink="/restaurants" (click)="deleteRestaurant(document.docId)">Delete</a></td>
+                <td><a routerLink="/restaurants" [queryParams]="{action: 'update'}" (click)="saveDataInSession(document)">Update</a></td>
             </tr>
         </tbody>
     </table>

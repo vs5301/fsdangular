@@ -15,6 +15,11 @@ import { ProfileComponent } from './pages/profile/profile.component'
 import { DbService } from './service/db.service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AuthenticateComponent } from './pages/authenticate/authenticate.component';
+import { DishesComponent } from './pages/dishes/dishes.component';
+import { NewsComponent } from './pages/news/news.component';
+import { HttpClientModule } from '@angular/common/http';
+import { LifecyclehooksComponent } from './pages/lifecyclehooks/lifecyclehooks.component';
+import { PromoCodePipeComponent } from './pages/promo-code-pipe/promo-code-pipe.component'
 
 @NgModule({
   declarations: [
@@ -24,7 +29,11 @@ import { AuthenticateComponent } from './pages/authenticate/authenticate.compone
     NavbarComponent,
     RestaurantsComponent,
     ProfileComponent,
-    AuthenticateComponent
+    AuthenticateComponent,
+    DishesComponent,
+    NewsComponent,
+    LifecyclehooksComponent,
+    PromoCodePipeComponent
   ],
   imports: [
     BrowserModule,
@@ -33,7 +42,8 @@ import { AuthenticateComponent } from './pages/authenticate/authenticate.compone
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideFirestore(() => getFirestore()),
     FirestoreModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    HttpClientModule
   ],
   providers: [
     DbService,

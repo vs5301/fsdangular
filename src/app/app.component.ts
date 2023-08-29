@@ -7,4 +7,10 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'fsdangular';
+  show = true
+  quote = "Be Exceptional"
+
+  changeQuote(){
+    this.quote = "Work Hard"
+  }
 }

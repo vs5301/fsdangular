@@ -4,7 +4,8 @@ import { Restaurants } from 'src/app/models/restaurants';
 import { RestaurantService } from 'src/app/service/restaurants.service';
 import { getDownloadURL, getStorage, ref, uploadBytes } from '@angular/fire/storage';
 import { DbService } from 'src/app/service/db.service';
-import { Firestore, addDoc, collection, serverTimestamp, doc, updateDoc, getDoc, getDocs } from '@angular/fire/firestore';
+import { Firestore, addDoc, collection, serverTimestamp, doc, updateDoc, getDocs, deleteDoc } from '@angular/fire/firestore';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-restaurants',
@@ -17,6 +18,9 @@ export class RestaurantsComponent implements OnInit {
   addView:boolean = false
   text = "Add Restaurant"
   dataToSave: any
+  action: string = ""
+  restaurantData: any
+  updateMode: boolean = false
 
   cities = [
     {city: "Ludhiana", state: "Punjab", pinCode: "141001"},
@@ -44,13 +48,36 @@ export class RestaurantsComponent implements OnInit {
   constructor(
     public service: RestaurantService,
     public dbService: DbService,
-    public firestore: Firestore
+    public firestore: Firestore,
+    public route: ActivatedRoute
   ){
 
   }
 
   ngOnInit(): void {
       this.fetchPromoRestaurants()
+      this.route.queryParams.subscribe((params) => {
+        this.action = params['action']
+        if (this.action == "update") {
+          this.addView = true
+          this.updateMode = true
+          this.text = "Update Restaurant"
+          
+          const sessionData = sessionStorage.getItem("restaurant")
+          this.restaurantData = JSON.parse(sessionData!)
+
+          this.restaurantForm.patchValue({
+            name: this.restaurantData.name,
+            phone: this.restaurantData.phone,
+            email: this.restaurantData.email,
+            veg: this.restaurantData.veg,
+            nonVeg: this.restaurantData.nonVeg,
+            servingType: this.restaurantData.servingType,
+            city: this.restaurantData.city,
+            image: this.restaurantData.image
+          })
+        }
+      })
   }
 
   changeView(){
@@ -68,8 +95,10 @@ export class RestaurantsComponent implements OnInit {
 
   addRestaurantToFirebase(){
     this.loader = true
-    console.log(this.restaurantForm.value);
-    // this.restaurantForm.value['creationTime'] = serverTimestamp()
+    if (this.updateMode) {
+      this.updateRestaurant(this.restaurantData.docId)
+      return;
+    }
     this.uploadImageToFirebase(this.restaurantForm.value)
     this.restaurantForm.reset()
   }
@@ -92,12 +121,6 @@ export class RestaurantsComponent implements OnInit {
         this.dataToSave['image'] = downloadURL;
         this.dataToSave['creationTime'] = serverTimestamp()
         addDoc(collection(this.firestore, "restaurants"), this.dataToSave)
-    
-
-
-        // const collectionRef = collection(this.firestore, 'restaurants')
-        // addDoc(collectionRef, dataToSave)
-        console.log("Restaurant Added");
         this.loader = false;
       })
       .catch((error) => {
@@ -107,29 +130,31 @@ export class RestaurantsComponent implements OnInit {
     })
   }
 
-  updateData(name: string){
-    const docRef = doc(collection(this.firestore, "restaurants"), name)
+  updateRestaurant(docId: any){
+    const docRef = doc(collection(this.firestore, "restaurants"), docId)
     updateDoc(docRef, this.restaurantForm.value)
+    this.restaurantForm.reset()
+    this.loader = false
   }
 
   async fetchPromoRestaurants(){
-    // const docRef = doc(collection(this.firestore, "restaurants"), "Subway")
-    // await getDoc(docRef).then((result) => {
-    //   this.restaurantList = result.data()
-    //   console.log(this.restaurantList);
-    //   return this.restaurantList
-    // })
-
     const snapshots = await getDocs(collection(this.firestore, "restaurants"))
     
     this.restaurantList = snapshots.docs.map((doc) => {
       const data = doc.data()
+      console.log(doc.id);
       data['docId'] = doc.id
       return data
-    })
-
-    console.log(this.restaurantList);
-    
+    })    
   }
+
+  deleteRestaurant(docId: any){
+    deleteDoc(doc(collection(this.firestore, "restaurants"), docId))
+  }
+
+  saveDataInSession(restaurant: any){
+    sessionStorage.setItem("restaurant", JSON.stringify(restaurant))
+  }
+
 
 }
